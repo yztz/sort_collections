@@ -17,4 +17,4 @@ void direct_insertion(int nums[], int size) {
     }
 }
 
-ADD_SORT("Direct Insert", direct_insertion)
+ADD_SORT("Direct Insert O(n2)", direct_insertion)

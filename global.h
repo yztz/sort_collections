@@ -25,6 +25,7 @@ typedef int (*comparator_t)(int, int);
     }
 
 #include <stdio.h>
+#include <stdbool.h>
 
 extern void run_all();
 extern void print_array(int array[], int size);
