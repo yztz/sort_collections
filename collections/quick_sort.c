@@ -4,10 +4,11 @@
 #include "global.h"
 
 int partition(int nums[], int left, int right) {
-    int mid = (left + right) / 2;
+    int mid = (left + right - 1) / 2;
     int pivot = nums[mid];
-    swap(nums, 0, mid);
-    int i = left, j = right;
+    swap(nums, left, mid);
+    int i = left, j = right - 1;
+
     while (i < j) {
         while (nums[j] >= pivot && i < j) j--;
         nums[i] = nums[j];
@@ -16,17 +17,20 @@ int partition(int nums[], int left, int right) {
     }
 
     nums[i] = pivot;
-
     return i;
 }
 
-void quick_sort(int nums[], int size) {
-    if(size <= 1) return;
+void __quick_sort(int nums[], int left, int right) {
+    if (left >= right) return;
 
-    int pivot = partition(nums, 0, size - 1);
+    int pivot = partition(nums, left, right);
 
-    quick_sort(nums, pivot);
-    quick_sort(nums + pivot + 1, size - pivot - 1);
+    __quick_sort(nums, left, pivot);
+    __quick_sort(nums, pivot + 1, right);
 }
 
-ADD_SORT("Quick Sort O(nlogn)", quick_sort);
+void quick_sort(int nums[], int size) {
+    __quick_sort(nums, 0, size);
+}
+
+ADD_SORT("Quick Sort", quick_sort, "O(nlogn)");

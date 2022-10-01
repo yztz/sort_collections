@@ -17,4 +17,4 @@ void bubble(int nums[], int size) {
     }
 }
 
-ADD_SORT("Bubble O(n2)", bubble)
+ADD_SORT("Bubble", bubble, "O(n2)")

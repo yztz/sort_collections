@@ -23,4 +23,4 @@ void half_insertion(int nums[], int size) {
     }
 }
 
-ADD_SORT("Half Insert O(n2)", half_insertion);
+ADD_SORT("Half Insert", half_insertion, "O(n2)");

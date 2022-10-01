@@ -9,25 +9,35 @@
 #include <time.h>
 #include <string.h>
 
-
-int nums[ARRAY_SIZE];
-int nums_order[ARRAY_SIZE];
+int *nums;
+int *nums_order;
 
 #define SHOW(s, c) { \
 crossline_color_set(c); \
         printf(s);   \
 crossline_color_set(CROSSLINE_COLOR_DEFAULT);}
 
+#define ERROR(s) { \
+    SHOW(s, CROSSLINE_FGCOLOR_RED); \
+    exit(-1);} \
+
+
 sort_case_t collections[__MAX_CASES];
 static int collection_size = 0;
 
-void __add_sort(char *name, sorter_t sorter) {
-    collections[collection_size++] = (sort_case_t) {name, sorter};
+static int *get_case() {
+    int *copy = (int *)malloc(sizeof(int) * ARRAY_SIZE);
+    if(!copy) ERROR("Fetch Case Fail");
+    memmove(copy, nums, sizeof(int) * ARRAY_SIZE);
+    return copy;
+}
+
+void __add_sort(char *name, sorter_t sorter, char *desc) {
+    collections[collection_size++] = (sort_case_t) {name, sorter, desc};
 }
 
 void run_one(sort_case_t *sort_case) {
-    int nums_copy[ARRAY_SIZE];
-    memcpy(nums_copy, nums, sizeof nums);
+    int *nums_copy = get_case();
 
     tick_t t1 = timer_system();
     sort_case->sorter(nums_copy, ARRAY_SIZE);
@@ -48,6 +58,7 @@ void run_one(sort_case_t *sort_case) {
         printf(" Bad Answer\n");
     }
 
+    free(nums_copy);
 }
 
 void print_origin() {
@@ -62,8 +73,7 @@ void run_all() {
     print_origin();
     printf("\n\n");
 #endif
-
-    printf("[Run All]\n");
+    SHOW("[Run All]\n", CROSSLINE_FGCOLOR_CYAN);
     for (int i = 0; i < collection_size; ++i) {
         run_one(collections + i);
     }
@@ -82,18 +92,41 @@ int natural_comparator(const void *a, const void *b) {
 
 void __init_array() {
     srand((unsigned) time(NULL));
+
+    nums = (int *)malloc(sizeof(int) * ARRAY_SIZE);
+    nums_order = (int *)malloc(sizeof(int) * ARRAY_SIZE);
+
+    if(!nums || !nums_order)
+        ERROR("Array Init Fail");
+
     for (int i = 0; i < ARRAY_SIZE; ++i) {
         nums_order[i] = nums[i] = rand() % MAX_NUM;
     }
     qsort(nums_order, ARRAY_SIZE, sizeof(int), natural_comparator);
 }
 
+
+void __free_array() {
+    free(nums);
+    free(nums_order);
+}
+
 void __init_timer() {
     timer_lib_initialize();
 }
 
+void __disable_timer() {
+    timer_lib_shutdown();
+}
+
 void __attribute__((constructor)) prepare() {
     __init_array();
+    __init_timer();
+}
+
+void __attribute__ ((destructor)) clean() {
+    __free_array();
+    __disable_timer();
 }
 
 

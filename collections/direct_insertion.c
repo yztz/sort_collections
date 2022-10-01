@@ -10,11 +10,11 @@ void direct_insertion(int nums[], int size) {
             int num = nums[i];
             for (; j >= 1; j--) {
                 nums[j] = nums[j - 1];
-                if(nums[j - 1] < num) break;
+                if (nums[j - 1] < num) break;
             }
             nums[j] = num;
         }
     }
 }
 
-ADD_SORT("Direct Insert O(n2)", direct_insertion)
+ADD_SORT("Direct Insert", direct_insertion, "O(n2)")
