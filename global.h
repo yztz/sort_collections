@@ -6,6 +6,8 @@
 #define SORT_COLLECTIONS_GLOBAL_H
 
 #include "config.h"
+#include "crossline.h"
+
 #define INFINITE MAX_NUM
 
 #define __MAX_CASES 100
@@ -26,11 +28,18 @@ typedef int (*comparator_t)(int, int);
     }
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
+
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
 extern void run_all();
 extern void print_array(int array[], int size);
 extern int verify(int nums[], int size);
+
+void show(char *string, crossline_color_e color);
+void error(char *string);
 extern void swap(int nums[], int i, int j);
 
 #endif //SORT_COLLECTIONS_GLOBAL_H

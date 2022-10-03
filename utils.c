@@ -3,6 +3,18 @@
 //
 #include "global.h"
 
+void show(char *string, crossline_color_e color) {
+    crossline_color_set(color);
+    printf(string);
+    crossline_color_set(CROSSLINE_COLOR_DEFAULT);
+}
+
+void error(char *string) {
+    show(string, CROSSLINE_FGCOLOR_RED);
+    exit(-1);
+}
+
+
 void swap(int nums[], int i, int j) {
     int tmp = nums[j];
     nums[j] = nums[i];

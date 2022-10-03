@@ -1,2 +1,2 @@
-#define ARRAY_SIZE 10000
+#define ARRAY_SIZE 20000
 #define MAX_NUM 300

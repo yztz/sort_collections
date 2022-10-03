@@ -3,7 +3,6 @@
 //
 
 #include "global.h"
-#include "crossline.h"
 #include "timer.h"
 #include <stdlib.h>
 #include <time.h>
@@ -12,22 +11,13 @@
 int *nums;
 int *nums_order;
 
-#define SHOW(s, c) { \
-crossline_color_set(c); \
-        printf(s);   \
-crossline_color_set(CROSSLINE_COLOR_DEFAULT);}
-
-#define ERROR(s) { \
-    SHOW(s, CROSSLINE_FGCOLOR_RED); \
-    exit(-1);} \
-
 
 sort_case_t collections[__MAX_CASES];
 static int collection_size = 0;
 
 static int *get_case() {
     int *copy = (int *)malloc(sizeof(int) * ARRAY_SIZE);
-    if(!copy) ERROR("Fetch Case Fail");
+    if(!copy) error("Fetch Case Fail");
     memmove(copy, nums, sizeof(int) * ARRAY_SIZE);
     return copy;
 }
@@ -46,15 +36,16 @@ void run_one(sort_case_t *sort_case) {
     int v = verify(nums_copy, ARRAY_SIZE);
 
     if (v) {
-        SHOW(sort_case->name, CROSSLINE_FGCOLOR_GREEN | CROSSLINE_FGCOLOR_BRIGHT | CROSSLINE_UNDERLINE)
-        printf(" %llu ms ", dt);
+        show(sort_case->name, CROSSLINE_FGCOLOR_GREEN | CROSSLINE_FGCOLOR_BRIGHT | CROSSLINE_UNDERLINE);
+        printf(" %llums ", dt);
+        show(sort_case->desc, CROSSLINE_FGCOLOR_MAGENTA);
 //#if ARRAY_SIZE <= 20
 //        printf(">> ", sort_case->name);
 //        print_array(nums_copy, ARRAY_SIZE);
 //#endif
         printf("\n");
     } else {
-        SHOW(sort_case->name, CROSSLINE_FGCOLOR_RED | CROSSLINE_FGCOLOR_BRIGHT | CROSSLINE_UNDERLINE)
+        show(sort_case->name, CROSSLINE_FGCOLOR_RED | CROSSLINE_FGCOLOR_BRIGHT | CROSSLINE_UNDERLINE);
         printf(" Bad Answer\n");
     }
 
@@ -73,7 +64,7 @@ void run_all() {
     print_origin();
     printf("\n\n");
 #endif
-    SHOW("[Run All]\n", CROSSLINE_FGCOLOR_CYAN);
+    show("[Run All]\n", CROSSLINE_FGCOLOR_CYAN);
     for (int i = 0; i < collection_size; ++i) {
         run_one(collections + i);
     }
@@ -97,7 +88,7 @@ void __init_array() {
     nums_order = (int *)malloc(sizeof(int) * ARRAY_SIZE);
 
     if(!nums || !nums_order)
-        ERROR("Array Init Fail");
+        error("Array Init Fail");
 
     for (int i = 0; i < ARRAY_SIZE; ++i) {
         nums_order[i] = nums[i] = rand() % MAX_NUM;
